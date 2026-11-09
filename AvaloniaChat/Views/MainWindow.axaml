@@ -1,0 +1,86 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaChat.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+        x:Class="AvaloniaChat.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Width="600" Height="500"
+        Title="AvaloniaChat">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <!-- 所有訊息泡泡的共同外觀 -->
+        <Style Selector="Border.message">
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="Margin" Value="0,4" />
+            <Setter Property="MaxWidth" Value="420" />
+        </Style>
+
+        <!-- 使用者：靠右、藍底白字 -->
+        <Style Selector="Border.user">
+            <Setter Property="Background" Value="#2563EB" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style Selector="Border.user > TextBlock">
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <!-- 助理：靠左、灰底深色字（明確指定前景色，深色主題下也看得清楚） -->
+        <Style Selector="Border.assistant">
+            <Setter Property="Background" Value="#E5E7EB" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector="Border.assistant > TextBlock">
+            <Setter Property="Foreground" Value="#111827" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="*,Auto">
+
+        <ScrollViewer x:Name="MessagesScrollViewer"
+                      Grid.Row="0"
+                      Padding="12">
+            <ItemsControl ItemsSource="{Binding Messages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ChatMessageViewModel">
+                        <Border Classes="message"
+                                Classes.user="{Binding IsUser}"
+                                Classes.assistant="{Binding !IsUser}">
+                            <TextBlock Text="{Binding Text}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,Auto"
+              Margin="12">
+            <TextBox x:Name="InputTextBox"
+                     Grid.Column="0"
+                     Text="{Binding InputText}"
+                     PlaceholderText="輸入訊息，按 Enter 送出">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Enter" Command="{Binding SendCommand}" />
+                </TextBox.KeyBindings>
+            </TextBox>
+            <Button x:Name="SendButton"
+                    Grid.Column="1"
+                    Margin="8,0,0,0"
+                    Content="Send"
+                    Command="{Binding SendCommand}" />
+        </Grid>
+
+    </Grid>
+
+</Window>
