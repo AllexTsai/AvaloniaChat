@@ -30,7 +30,8 @@
             <Setter Property="Background" Value="#2563EB" />
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
-        <Style Selector="Border.user > TextBlock">
+        <!-- 空白（而非 >）是「子孫」選擇器：泡泡裡的 TextBlock 現在包在 StackPanel 內 -->
+        <Style Selector="Border.user TextBlock">
             <Setter Property="Foreground" Value="White" />
         </Style>
 
@@ -39,8 +40,15 @@
             <Setter Property="Background" Value="#E5E7EB" />
             <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
-        <Style Selector="Border.assistant > TextBlock">
+        <Style Selector="Border.assistant TextBlock">
             <Setter Property="Foreground" Value="#111827" />
+        </Style>
+
+        <!-- 效能資訊：小字、淡色 -->
+        <Style Selector="TextBlock.stats">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Opacity" Value="0.6" />
+            <Setter Property="Margin" Value="0,4,0,0" />
         </Style>
     </Window.Styles>
 
@@ -55,8 +63,13 @@
                         <Border Classes="message"
                                 Classes.user="{Binding IsUser}"
                                 Classes.assistant="{Binding !IsUser}">
-                            <TextBlock Text="{Binding Text}"
-                                       TextWrapping="Wrap" />
+                            <StackPanel>
+                                <TextBlock Text="{Binding Text}"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Classes="stats"
+                                           Text="{Binding Stats}"
+                                           IsVisible="{Binding Stats, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                            </StackPanel>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -64,7 +77,7 @@
         </ScrollViewer>
 
         <Grid Grid.Row="1"
-              ColumnDefinitions="*,Auto"
+              ColumnDefinitions="*,Auto,Auto"
               Margin="12">
             <TextBox x:Name="InputTextBox"
                      Grid.Column="0"
@@ -79,6 +92,11 @@
                     Margin="8,0,0,0"
                     Content="Send"
                     Command="{Binding SendCommand}" />
+            <Button x:Name="CancelButton"
+                    Grid.Column="2"
+                    Margin="8,0,0,0"
+                    Content="Cancel"
+                    Command="{Binding CancelCommand}" />
         </Grid>
 
     </Grid>
