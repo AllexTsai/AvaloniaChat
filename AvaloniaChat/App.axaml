@@ -11,5 +11,7 @@
 
     <Application.Styles>
         <FluentTheme />
+        <!-- 寫法依官方文件「Sharing styles」：/ 開頭表示本專案根目錄下的路徑 -->
+        <StyleInclude Source="/Styles/ChatStyles.axaml" />
     </Application.Styles>
 </Application>

@@ -16,46 +16,20 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Window.Styles>
-        <!-- 所有訊息泡泡的共同外觀 -->
-        <Style Selector="Border.message">
-            <Setter Property="CornerRadius" Value="10" />
-            <Setter Property="Padding" Value="12,8" />
-            <Setter Property="Margin" Value="0,4" />
-            <Setter Property="MaxWidth" Value="420" />
-        </Style>
+    <!-- 訊息泡泡的樣式在 Styles/ChatStyles.axaml，由 App.axaml 的 StyleInclude 引入 -->
 
-        <!-- 使用者：靠右、藍底白字 -->
-        <Style Selector="Border.user">
-            <Setter Property="Background" Value="#2563EB" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-        </Style>
-        <!-- 空白（而非 >）是「子孫」選擇器：泡泡裡的 TextBlock 現在包在 StackPanel 內 -->
-        <Style Selector="Border.user TextBlock">
-            <Setter Property="Foreground" Value="White" />
-        </Style>
+    <Grid RowDefinitions="Auto,*,Auto">
 
-        <!-- 助理：靠左、灰底深色字（明確指定前景色，深色主題下也看得清楚） -->
-        <Style Selector="Border.assistant">
-            <Setter Property="Background" Value="#E5E7EB" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-        <Style Selector="Border.assistant TextBlock">
-            <Setter Property="Foreground" Value="#111827" />
-        </Style>
-
-        <!-- 效能資訊：小字、淡色 -->
-        <Style Selector="TextBlock.stats">
-            <Setter Property="FontSize" Value="11" />
-            <Setter Property="Opacity" Value="0.6" />
-            <Setter Property="Margin" Value="0,4,0,0" />
-        </Style>
-    </Window.Styles>
-
-    <Grid RowDefinitions="*,Auto">
+        <!-- 上方工具列：亮/暗切換（處理常式在 code-behind，因為這是純 View 的行為） -->
+        <ToggleButton x:Name="ThemeToggle"
+                      Grid.Row="0"
+                      Margin="12,12,12,0"
+                      HorizontalAlignment="Right"
+                      Content="深色模式"
+                      IsCheckedChanged="OnThemeToggleChanged" />
 
         <ScrollViewer x:Name="MessagesScrollViewer"
-                      Grid.Row="0"
+                      Grid.Row="1"
                       Padding="12">
             <ItemsControl ItemsSource="{Binding Messages}">
                 <ItemsControl.ItemTemplate>
@@ -76,7 +50,7 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <Grid Grid.Row="1"
+        <Grid Grid.Row="2"
               ColumnDefinitions="*,Auto,Auto"
               Margin="12">
             <TextBox x:Name="InputTextBox"

@@ -1,0 +1,59 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <StackPanel Width="360" Spacing="8">
+      <Border Padding="20" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+        <StackPanel>
+          <Border Classes="message user">
+            <TextBlock Text="使用者訊息" />
+          </Border>
+          <Border Classes="message assistant">
+            <StackPanel>
+              <TextBlock Text="助理回覆" />
+              <TextBlock Classes="stats" Text="TTFT 500 ms · 速度 20.0 tokens/s" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </Design.PreviewWith>
+
+  <!--
+    顏色一律用 Fluent 主題資源（DynamicResource），亮/暗切換時自動更新，不寫死色碼。
+    資源名稱已確認存在於 Avalonia.Themes.Fluent 12.1.5。
+  -->
+
+  <!-- 所有訊息泡泡的共同外觀 -->
+  <Style Selector="Border.message">
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="Margin" Value="0,4" />
+    <Setter Property="MaxWidth" Value="420" />
+  </Style>
+
+  <!-- 使用者：靠右、強調色底。前景/背景用 Fluent 強調色按鈕那一組，兩者是主題設計好的對比配對。 -->
+  <Style Selector="Border.user">
+    <Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+  </Style>
+  <!-- 空白（而非 >）是「子孫」選擇器：泡泡裡的 TextBlock 包在 StackPanel 內 -->
+  <Style Selector="Border.user TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource AccentButtonForeground}" />
+  </Style>
+
+  <!-- 助理：靠左、淡底。BaseLow 是半透明的「基底色」（亮色主題偏黑、暗色主題偏白），BaseHigh 是主要文字色。 -->
+  <Style Selector="Border.assistant">
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+  <Style Selector="Border.assistant TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+  </Style>
+
+  <!-- 效能資訊：小字、淡色（沿用所在泡泡的前景色，只降低不透明度，不另設顏色） -->
+  <Style Selector="TextBlock.stats">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Opacity" Value="0.7" />
+    <Setter Property="Margin" Value="0,4,0,0" />
+  </Style>
+</Styles>
